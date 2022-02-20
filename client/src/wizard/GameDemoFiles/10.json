@@ -1,0 +1,94 @@
+{
+  "oldRounds" : [ {
+    "numberOfCards" : 1,
+    "bets" : {
+      "Sebastian123" : 1,
+      "Tabea123" : 0,
+      "Domi123" : 1
+    },
+    "sticheOfPlayer" : {
+      "Sebastian123" : 1,
+      "Tabea123" : 0,
+      "Domi123" : 0
+    },
+    "cmpSumPointsOfPlayers" : {
+      "Sebastian123" : 30,
+      "Tabea123" : 20,
+      "Domi123" : -10
+    }
+  } ],
+  "openWizardRound" : {
+    "immutableRoundState" : {
+      "players" : [ {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      }, {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      }, {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      } ],
+      "numberOfCards" : 2,
+      "trumpCard" : {
+        "type" : "RsJoker",
+        "cardID" : "J1",
+        "cmpTrumpColor" : null,
+        "color" : null,
+        "number" : null
+      }
+    },
+    "currentRoundStateForPlayer" : {
+      "type" : "RsRoundStateForPlayerNormalRound",
+      "phase" : "BettingPhase",
+      "bets" : {
+        "Sebastian123" : null,
+        "Tabea123" : null,
+        "Domi123" : null
+      },
+      "currentPlayer" : {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      },
+      "sticheOfPlayer" : {
+        "Sebastian123" : 0,
+        "Tabea123" : 0,
+        "Domi123" : 0
+      },
+      "trumpColor" : "Red",
+      "currentStich" : {
+        "startPlayer" : {
+          "userPublicID" : "Tabea123",
+          "userName" : "Tabea"
+        },
+        "playedCards" : [ ],
+        "cmpPlayerToCardMap" : { },
+        "cmpCurrentStichColor" : "Any"
+      },
+      "ownCards" : [ {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "B1",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 1
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "Y1",
+          "cmpTrumpColor" : "Yellow",
+          "color" : "Yellow",
+          "number" : 1
+        },
+        "cmpAllowedToPlay" : true
+      } ],
+      "numberOfCardsInHandsOfPlayers" : {
+        "Sebastian123" : 2,
+        "Tabea123" : 2,
+        "Domi123" : 2
+      }
+    }
+  }
+}

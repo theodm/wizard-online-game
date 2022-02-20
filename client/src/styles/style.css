@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .btn-h-sm {
+        width: 6vh;
+        height: 6vh;
+        padding-left:.75vh;
+        padding-right:.75vh;
+        min-height:2vh;
+        font-size:calc(.875vh * 3);
+    }
+
+    .btn-w-sm {
+        width: 6vw;
+        height: 6vw;
+        padding-left:.75vw;
+        padding-right:.75vw;
+        min-height:2vw;
+        font-size:calc(.875vw * 3);
+    }
+
+    .text-h-xs {
+        font-size: 2vh;
+    }
+
+    .text-w-xs {
+        font-size: 2vh;
+    }
+
+    .card-w-lg {
+        --card-width: 16vw;
+    }
+
+    .card-w-md {
+        --card-width: 14vw;
+    }
+
+    .card-w-sm {
+        --card-width: 10vw;
+    }
+
+    .card-h-lg {
+        --card-width: 16vh;
+    }
+
+    .card-h-md {
+        --card-width: 14vh;
+    }
+
+    .card-h-sm {
+        --card-width: 10vh;
+    }
+}
+
+/*!* https://github.com/themesberg/flowbite/blob/649c725b918c1665d399f410569db9de77012434/plugin.js *!*/
+/*.tooltip-arrow .tooltip-arrow:before {*/
+/*    position: absolute;*/
+/*    width: 8px;*/
+/*    height: 8px;*/
+/*    background: inherit;*/
+/*}*/
+
+/*.tooltip-arrow {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*.tooltip-arrow:before {*/
+/*    content: '';*/
+/*    visibility: visible;*/
+/*    transform: rotate(45deg);*/
+/*}*/
+
+/*#tooltip[data-popper-placement='top'] > .tooltip-arrow {*/
+/*    bottom: -4px;*/
+/*}*/
+
+/*#tooltip[data-popper-placement='bottom'] > .tooltip-arrow {*/
+/*    top: -4px;*/
+/*}*/
+
+/*#tooltip[data-popper-placement='left'] > .tooltip-arrow {*/
+/*    right: -4px;*/
+/*}*/
+
+/*#tooltip[data-popper-placement='right'] > .tooltip-arrow {*/
+/*    left: -4px;*/
+/*}*/
+
+/*[`[data-tooltip-style^='light'] + .tooltip > .tooltip-arrow:before`]: {*/
+/*                                                                    'border-style': 'solid',*/
+/*                                                                    'border-color': colors.gray[200],*/
+/*                                                                    },*/
+/*[`[data-tooltip-style^='light'] + .tooltip[data-popper-placement^='top'] > .tooltip-arrow:before`]: {*/
+/*                                                                                                  'border-bottom-width': '1px',*/
+/*                                                                                                  'border-right-width': '1px'*/
+/*                                                                                                  },*/
+/*[`[data-tooltip-style^='light'] + .tooltip[data-popper-placement^='right'] > .tooltip-arrow:before`]: {*/
+/*                                                                                                    'border-bottom-width': '1px',*/
+/*                                                                                                    'border-left-width': '1px'*/
+/*                                                                                                    },*/
+/*[`[data-tooltip-style^='light'] + .tooltip[data-popper-placement^='bottom'] > .tooltip-arrow:before`]: {*/
+/*                                                                                                     'border-top-width': '1px',*/
+/*                                                                                                     'border-left-width': '1px'*/
+/*                                                                                                     },*/
+/*[`[data-tooltip-style^='light'] + .tooltip[data-popper-placement^='left'] > .tooltip-arrow:before`]: {*/
+/*                                                                                                   'border-top-width': '1px',*/
+/*                                                                                                   'border-right-width': '1px'*/
+/*                                                                                                   },*/
+/*[`.tooltip[data-popper-placement^='top'] > .tooltip-arrow`]: {*/
+/*                                                               bottom: '-4px'*/
+/*                                                           },*/
+/*[`.tooltip[data-popper-placement^='bottom'] > .tooltip-arrow`]: {*/
+/*                                                                  top: '-4px'*/
+/*                                                              },*/
+/*[`.tooltip[data-popper-placement^='left'] > .tooltip-arrow`]: {*/
+/*                                                                right: '-4px'*/
+/*                                                            },*/
+/*[`.tooltip[data-popper-placement^='right'] > .tooltip-arrow`]: {*/
+/*                                                                 left: '-4px'*/
+/*                                                             },*/

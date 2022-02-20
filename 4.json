@@ -1,0 +1,67 @@
+{
+  "oldRounds" : [ ],
+  "openWizardRound" : {
+    "immutableRoundState" : {
+      "players" : [ {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      }, {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      }, {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      } ],
+      "numberOfCards" : 1,
+      "trumpCard" : {
+        "type" : "RsJoker",
+        "cmpTrumpColor" : null,
+        "color" : null,
+        "number" : null
+      }
+    },
+    "currentRoundStateForPlayer" : {
+      "type" : "RsRoundStateForPlayerFirstRound",
+      "phase" : "BettingPhase",
+      "bets" : {
+        "Sebastian123" : 1,
+        "Tabea123" : 0,
+        "Domi123" : null
+      },
+      "currentPlayer" : {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      },
+      "sticheOfPlayer" : {
+        "Sebastian123" : 0,
+        "Tabea123" : 0,
+        "Domi123" : 0
+      },
+      "trumpColor" : "Blue",
+      "currentStich" : {
+        "startPlayer" : {
+          "userPublicID" : "Sebastian123",
+          "userName" : "Sebastian"
+        },
+        "playedCards" : [ ],
+        "cmpPlayerToCardMap" : { },
+        "cmpCurrentStichColor" : "Any"
+      },
+      "cardsOfOtherPlayers" : {
+        "Tabea123" : [ {
+          "type" : "RsNumberColorCard",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 2
+        } ],
+        "Domi123" : [ {
+          "type" : "RsNumberColorCard",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 1
+        } ]
+      },
+      "cmpLocalPlayerHasPlayedCard" : false
+    }
+  }
+}

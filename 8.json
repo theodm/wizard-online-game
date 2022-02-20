@@ -1,0 +1,91 @@
+{
+  "oldRounds" : [ ],
+  "openWizardRound" : {
+    "immutableRoundState" : {
+      "players" : [ {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      }, {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      }, {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      } ],
+      "numberOfCards" : 1,
+      "trumpCard" : {
+        "type" : "RsJoker",
+        "cmpTrumpColor" : null,
+        "color" : null,
+        "number" : null
+      }
+    },
+    "currentRoundStateForPlayer" : {
+      "type" : "RsRoundStateForPlayerFirstRound",
+      "phase" : "RoundEnded",
+      "bets" : {
+        "Sebastian123" : 1,
+        "Tabea123" : 0,
+        "Domi123" : 1
+      },
+      "currentPlayer" : {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      },
+      "sticheOfPlayer" : {
+        "Sebastian123" : 1,
+        "Tabea123" : 0,
+        "Domi123" : 0
+      },
+      "trumpColor" : "Blue",
+      "currentStich" : {
+        "startPlayer" : {
+          "userPublicID" : "Sebastian123",
+          "userName" : "Sebastian"
+        },
+        "playedCards" : [ {
+          "type" : "RsNumberColorCard",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 3
+        }, {
+          "type" : "RsNumberColorCard",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 2
+        }, {
+          "type" : "RsNumberColorCard",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 1
+        } ],
+        "cmpPlayerToCardMap" : {
+          "Sebastian123" : {
+            "type" : "RsNumberColorCard",
+            "cmpTrumpColor" : "Blue",
+            "color" : "Blue",
+            "number" : 3
+          },
+          "Tabea123" : {
+            "type" : "RsNumberColorCard",
+            "cmpTrumpColor" : "Blue",
+            "color" : "Blue",
+            "number" : 2
+          },
+          "Domi123" : {
+            "type" : "RsNumberColorCard",
+            "cmpTrumpColor" : "Blue",
+            "color" : "Blue",
+            "number" : 1
+          }
+        },
+        "cmpCurrentStichColor" : "Blue"
+      },
+      "cardsOfOtherPlayers" : {
+        "Tabea123" : [ ],
+        "Domi123" : [ ]
+      },
+      "cmpLocalPlayerHasPlayedCard" : true
+    }
+  }
+}

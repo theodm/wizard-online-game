@@ -1,0 +1,233 @@
+{
+  "oldRounds" : [ ],
+  "openWizardRound" : {
+    "immutableRoundState" : {
+      "players" : [ {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      }, {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      }, {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      } ],
+      "numberOfCards" : 20,
+      "trumpCard" : null
+    },
+    "currentRoundStateForPlayer" : {
+      "type" : "RsRoundStateForPlayerNormalRound",
+      "phase" : "BettingPhase",
+      "bets" : {
+        "Sebastian123" : null,
+        "Tabea123" : null,
+        "Domi123" : null
+      },
+      "currentPlayer" : {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      },
+      "sticheOfPlayer" : {
+        "Sebastian123" : 0,
+        "Tabea123" : 0,
+        "Domi123" : 0
+      },
+      "trumpColor" : "None",
+      "currentStich" : {
+        "startPlayer" : {
+          "userPublicID" : "Sebastian123",
+          "userName" : "Sebastian"
+        },
+        "playedCards" : [ ],
+        "cmpPlayerToCardMap" : { },
+        "cmpCurrentStichColor" : "Any"
+      },
+      "ownCards" : [ {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      } ],
+      "numberOfCardsInHandsOfPlayers" : {
+        "Sebastian123" : 20,
+        "Tabea123" : 20,
+        "Domi123" : 20
+      }
+    }
+  }
+}

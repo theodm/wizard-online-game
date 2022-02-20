@@ -1,0 +1,10 @@
+root = true
+
+[*]
+end_of_line = lf
+
+[{*.kt, *.kts}]
+disabled_rules=no-wildcard-imports
+
+[{*.svelte, *.js, *.ts, *.tsx, *.jsx}]
+max_line_length = 120

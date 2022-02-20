@@ -1,0 +1,167 @@
+{
+  "oldRounds" : [ ],
+  "openWizardRound" : {
+    "immutableRoundState" : {
+      "players" : [ {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      }, {
+        "userPublicID" : "Tabea123",
+        "userName" : "Tabea"
+      }, {
+        "userPublicID" : "Domi123",
+        "userName" : "Domi"
+      }, {
+        "userPublicID" : "Niklas123",
+        "userName" : "Niklas"
+      }, {
+        "userPublicID" : "Jenny123",
+        "userName" : "Jenny"
+      }, {
+        "userPublicID" : "Steiner123",
+        "userName" : "Steiner123"
+      } ],
+      "numberOfCards" : 10,
+      "trumpCard" : {
+        "type" : "RsNumberColorCard",
+        "cardID" : "G9",
+        "cmpTrumpColor" : "Green",
+        "color" : "Green",
+        "number" : 9
+      }
+    },
+    "currentRoundStateForPlayer" : {
+      "type" : "RsRoundStateForPlayerNormalRound",
+      "phase" : "BettingPhase",
+      "bets" : {
+        "Sebastian123" : null,
+        "Tabea123" : null,
+        "Domi123" : null,
+        "Niklas123" : null,
+        "Jenny123" : null,
+        "Steiner123" : null
+      },
+      "currentPlayer" : {
+        "userPublicID" : "Sebastian123",
+        "userName" : "Sebastian"
+      },
+      "sticheOfPlayer" : {
+        "Sebastian123" : 0,
+        "Tabea123" : 0,
+        "Domi123" : 0,
+        "Niklas123" : 0,
+        "Jenny123" : 0,
+        "Steiner123" : 0
+      },
+      "trumpColor" : "Green",
+      "currentStich" : {
+        "startPlayer" : {
+          "userPublicID" : "Sebastian123",
+          "userName" : "Sebastian"
+        },
+        "playedCards" : [ ],
+        "cmpPlayerToCardMap" : { },
+        "cmpCurrentStichColor" : "Any"
+      },
+      "ownCards" : [ {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J3",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "Y8",
+          "cmpTrumpColor" : "Yellow",
+          "color" : "Yellow",
+          "number" : 8
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "R3",
+          "cmpTrumpColor" : "Red",
+          "color" : "Red",
+          "number" : 3
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "B2",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 2
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J2",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J4",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "G11",
+          "cmpTrumpColor" : "Green",
+          "color" : "Green",
+          "number" : 11
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNull",
+          "cardID" : "N3",
+          "cmpTrumpColor" : "None",
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsNumberColorCard",
+          "cardID" : "B3",
+          "cmpTrumpColor" : "Blue",
+          "color" : "Blue",
+          "number" : 3
+        },
+        "cmpAllowedToPlay" : true
+      }, {
+        "wizardCard" : {
+          "type" : "RsJoker",
+          "cardID" : "J1",
+          "cmpTrumpColor" : null,
+          "color" : null,
+          "number" : null
+        },
+        "cmpAllowedToPlay" : true
+      } ],
+      "numberOfCardsInHandsOfPlayers" : {
+        "Sebastian123" : 10,
+        "Tabea123" : 10,
+        "Domi123" : 10,
+        "Niklas123" : 10,
+        "Jenny123" : 10,
+        "Steiner123" : 10
+      }
+    }
+  }
+}

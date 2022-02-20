@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Server@8088" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="de.theodm.pwf.MainKt" />
+    <module name="play-with-friends.play-with-friends-server.main" />
+    <option name="PROGRAM_PARAMETERS" value="5000" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

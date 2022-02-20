@@ -2,3 +2,6 @@
 build
 web_modules
 node_modules
+.gradle
+.idea
+public
