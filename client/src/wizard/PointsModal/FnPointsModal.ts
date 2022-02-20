@@ -58,7 +58,7 @@ export function calcRoundsAndPlayers(wizardGameStateForPlayer: RsWizardGameState
             lastRound
                 .players
         )
-            .sort((a, b) => a[1].sumOfPoints - b[1].sumOfPoints)
+            .sort((a, b) => b[1].sumOfPoints - a[1].sumOfPoints)
             .map((it, index) => {
                 const obj: { [key: string]: number } = {}
 
