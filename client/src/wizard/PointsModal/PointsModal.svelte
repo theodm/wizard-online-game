@@ -12,7 +12,7 @@
     export let players: Player[];
     export let data: Round[];
 </script>
-<div class="debug-screens">
+<div>
     <ModalWrapper>
         <div class="w-full h-full flex justify-center lg:my-5 lg:h-auto">
             <div class="overflow-x-hidden bg-white w-full lg:w-3/6 lg:p-3">
