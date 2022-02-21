@@ -52,6 +52,14 @@ export class LobbySocket {
         );
     }
 
+    async addBot(botType: string) {
+        return await this.apiClient.addBot(
+            this.sessionKey,
+            this.lobbyCode,
+            botType
+        )
+    }
+
     updatePlayerOrder(newPlayerOrder: string[]) {
         return this.apiClient.updatePlayerOrder(
             this.sessionKey,

@@ -32,7 +32,7 @@
     }
 </script>
 
-<div class="p-2 mt-4 text-sm text-gray-700 border border-b-0 rounded-t-md border-cool-gray-600 bg-gray-50">
+<div class="p-2 mt-1 text-sm text-gray-700 border border-b-0 rounded-t-md border-cool-gray-600 bg-gray-50">
     {cachedItems.length} / 6 Spieler
     <span class="text-gray-500">(3 Spieler erforderlich)</span>
 </div>

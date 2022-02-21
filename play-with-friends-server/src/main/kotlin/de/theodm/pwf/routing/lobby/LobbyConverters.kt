@@ -1,12 +1,19 @@
 package de.theodm.pwf.routing.lobby
 
 import de.theodm.*
+import de.theodm.lobby.Lobby
 import de.theodm.pwf.routing.model.*
 
 fun Participant.toRsParticipant(): RsParticipant {
+    val userName: String = when (this) {
+        is LobbyParticipant -> this.userName
+        is BotParticipant -> this.name
+        else -> "<error>"
+    }
+
     return RsParticipant(
         userPublicID = this.userPublicID(),
-        userName = (this as LobbyParticipant).userName
+        userName = userName
     )
 }
 

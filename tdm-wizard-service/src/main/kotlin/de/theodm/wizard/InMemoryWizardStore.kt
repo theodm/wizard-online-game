@@ -10,6 +10,10 @@ class InMemoryWizardStore @Inject constructor() : WizardStorage {
     private val wizards: ConcurrentMap<String, WizardGameState> = ConcurrentHashMap()
     private val subject: BehaviorSubject<Pair<String, WizardGameState>> = BehaviorSubject.create()
 
+    override fun wizardStream(): Observable<Pair<String, WizardGameState>> {
+        return subject.hide()
+    }
+
     override fun wizardStream(lobbyCode: String): Observable<WizardGameState> {
         return subject
             .filter { it.first == lobbyCode }

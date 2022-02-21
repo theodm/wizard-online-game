@@ -8,10 +8,12 @@
     import Logo from "../components/Logo.svelte";
     import NButton from "../components/NButton.svelte";
     import Alert from "../homepage/components/Alert.svelte";
+    import Dropdown from "./Dropdown.svelte";
 
     export let onParticipantsChanged: (participants: RsParticipant[]) => Promise<void>;
     export let onGameStarted: () => Promise<void>;
     export let onLeaveLobby: () => Promise<void>;
+    export let onAddBot: (botKey: string) => Promise<void>;
     export let onSettingsChanged: (settings: RsLobbySettings) => void;
 
     export let currentError: undefined | {
@@ -57,6 +59,12 @@
     <div>
         <p class="flex justify-center py-2 pt-6">Aktuelle Spieler</p>
 
+
+        <div class="flex items-center justify-end">
+            <Dropdown caption="Bot hinzufügen" items={[{ label: "RandomBot", key: "RandomBot" }]} onItemClicked={(botType) => onAddBot(botType)}>
+
+            </Dropdown>
+        </div>
         <PlayerList
                 editable={isHost}
                 host={lobbyState.host}
@@ -65,6 +73,7 @@
                 participantsConnectivityInfo={lobbyState.participantsConnectivityInfo}
         />
     </div>
+
 
     <div class="w-full flex justify-center p-2 pt-6 mt-2">
         <NButton type="button"

@@ -1,5 +1,6 @@
 package de.theodm.pwf.routing.model.wizard
 
+import de.theodm.Participant
 import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsParticipant
 import de.theodm.pwf.routing.model.RsParticipant
@@ -28,7 +29,7 @@ data class RsImmutableRoundState(
 
 fun ImmutableRoundState.toRsImmutableRoundState(): RsImmutableRoundState {
     return RsImmutableRoundState(
-        this.players.map { it as LobbyParticipant }.map { it.toRsParticipant() },
+        this.players.map { it as Participant }.map { it.toRsParticipant() },
         this.numberOfCards,
         this.trumpCard?.toRsWizardCard()
     )

@@ -39,10 +39,10 @@ import {
 export interface RsRoundStateForPlayer {
     /**
      * 
-     * @type {string}
+     * @type {{ [key: string]: number; }}
      * @memberof RsRoundStateForPlayer
      */
-    trumpColor?: RsRoundStateForPlayerTrumpColorEnum;
+    sticheOfPlayer: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -51,10 +51,16 @@ export interface RsRoundStateForPlayer {
     bets: { [key: string]: number; };
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {RsStich}
      * @memberof RsRoundStateForPlayer
      */
-    sticheOfPlayer: { [key: string]: number; };
+    currentStich: RsStich;
+    /**
+     * 
+     * @type {string}
+     * @memberof RsRoundStateForPlayer
+     */
+    phase: RsRoundStateForPlayerPhaseEnum;
     /**
      * 
      * @type {RsParticipant}
@@ -66,13 +72,7 @@ export interface RsRoundStateForPlayer {
      * @type {string}
      * @memberof RsRoundStateForPlayer
      */
-    phase: RsRoundStateForPlayerPhaseEnum;
-    /**
-     * 
-     * @type {RsStich}
-     * @memberof RsRoundStateForPlayer
-     */
-    currentStich: RsStich;
+    trumpColor?: RsRoundStateForPlayerTrumpColorEnum;
     /**
      * 
      * @type {string}
@@ -85,21 +85,21 @@ export interface RsRoundStateForPlayer {
 * @export
 * @enum {string}
 */
+export enum RsRoundStateForPlayerPhaseEnum {
+    SelectTrumpPhase = 'SelectTrumpPhase',
+    BettingPhase = 'BettingPhase',
+    PlayingPhase = 'PlayingPhase',
+    RoundEnded = 'RoundEnded'
+}/**
+* @export
+* @enum {string}
+*/
 export enum RsRoundStateForPlayerTrumpColorEnum {
     Red = 'Red',
     Yellow = 'Yellow',
     Green = 'Green',
     Blue = 'Blue',
     None = 'None'
-}/**
-* @export
-* @enum {string}
-*/
-export enum RsRoundStateForPlayerPhaseEnum {
-    SelectTrumpPhase = 'SelectTrumpPhase',
-    BettingPhase = 'BettingPhase',
-    PlayingPhase = 'PlayingPhase',
-    RoundEnded = 'RoundEnded'
 }
 
 export function RsRoundStateForPlayerFromJSON(json: any): RsRoundStateForPlayer {
@@ -120,12 +120,12 @@ export function RsRoundStateForPlayerFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'trumpColor': !exists(json, 'trumpColor') ? undefined : json['trumpColor'],
-        'bets': json['bets'],
         'sticheOfPlayer': json['sticheOfPlayer'],
-        'currentPlayer': RsParticipantFromJSON(json['currentPlayer']),
-        'phase': json['phase'],
+        'bets': json['bets'],
         'currentStich': RsStichFromJSON(json['currentStich']),
+        'phase': json['phase'],
+        'currentPlayer': RsParticipantFromJSON(json['currentPlayer']),
+        'trumpColor': !exists(json, 'trumpColor') ? undefined : json['trumpColor'],
         'type': json['type'],
     };
 }
@@ -139,12 +139,12 @@ export function RsRoundStateForPlayerToJSON(value?: RsRoundStateForPlayer | null
     }
     return {
         
-        'trumpColor': value.trumpColor,
-        'bets': value.bets,
         'sticheOfPlayer': value.sticheOfPlayer,
-        'currentPlayer': RsParticipantToJSON(value.currentPlayer),
-        'phase': value.phase,
+        'bets': value.bets,
         'currentStich': RsStichToJSON(value.currentStich),
+        'phase': value.phase,
+        'currentPlayer': RsParticipantToJSON(value.currentPlayer),
+        'trumpColor': value.trumpColor,
         'type': value.type,
     };
 }

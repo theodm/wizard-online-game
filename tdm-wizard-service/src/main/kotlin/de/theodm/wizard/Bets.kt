@@ -64,6 +64,35 @@ data class Bets internal constructor(
         return otherPlayersPlacedBet && playerDidNotPlaceBetYet
     }
 
+    private fun notAllowedBet(
+        player: WizardPlayer,
+        numberOfCards: Int
+    ): Int? {
+        if (!isLastBetter(player)) {
+            return null
+        }
+
+        return numberOfCards - origin
+            .values
+            .filterNotNull()
+            .sum()
+    }
+
+    fun allowedBets(
+        player: WizardPlayer,
+        numberOfCards: Int
+    ): List<Int> {
+        val allBets = (1.. numberOfCards).toList()
+
+        val notAllowedBet = notAllowedBet(player, numberOfCards)
+
+        if (notAllowedBet == null) {
+            return allBets
+        }
+
+        return allBets - notAllowedBet
+    }
+
     /**
      * Setzt die Voraussage für einen Spieler.
      */
@@ -79,12 +108,7 @@ data class Bets internal constructor(
             throw BetBiggerThanNumberOfCardsException(bet, numberOfCards)
         }
 
-        val betsAreEqualToCards = origin
-            .values
-            .filterNotNull()
-            .sum() + bet == numberOfCards
-
-        if (isLastBetter(player) && betsAreEqualToCards) {
+        if (bet == notAllowedBet(player, numberOfCards)) {
             throw BetsAreEqualToNumberOfCardsException(player, bet, numberOfCards)
         }
 

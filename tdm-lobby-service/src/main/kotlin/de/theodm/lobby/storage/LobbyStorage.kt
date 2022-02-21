@@ -1,6 +1,6 @@
-package de.theodm.storage
+package de.theodm.lobby.storage
 
-import de.theodm.Lobby
+import de.theodm.lobby.Lobby
 import de.theodm.LobbyID
 import de.theodm.Participant
 import io.reactivex.rxjava3.core.Observable

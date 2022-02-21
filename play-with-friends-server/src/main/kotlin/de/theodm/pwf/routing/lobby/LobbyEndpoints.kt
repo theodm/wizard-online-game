@@ -70,6 +70,16 @@ class LobbyEndpoints @Inject constructor(
                 leavingParticipant = LobbyParticipant.of(authUser)
             )
     }
+
+    fun addBot(authUser: User, lobbyID: String, botType: String) {
+        lobbyService
+            .botJoin(
+                LobbyParticipant.of(authUser),
+                lobbyID,
+                botType
+            )
+
+    }
 //
 //    fun getLobbies(): RsLobbiesResponse {
 //        return RsLobbiesResponse(lobbyService

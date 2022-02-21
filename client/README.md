@@ -27,3 +27,5 @@ Your app is ready to be deployed!
 ### Q: What about Eject?
 
 No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
+
+https://github.com/webpack/webpack/issues/10227#issuecomment-698662228

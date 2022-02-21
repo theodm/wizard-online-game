@@ -2,7 +2,8 @@ package de.theodm
 
 import com.google.common.collect.Range
 import com.google.common.truth.Truth
-import de.theodm.storage.InMemoryLobbyStorage
+import de.theodm.lobby.Lobby
+import de.theodm.lobby.storage.InMemoryLobbyStorage
 import extensions.lastOrThrow
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -12,10 +13,8 @@ import java.time.Instant
 data class WizardParticipant(
     private val sessionID: String
 ) : Participant {
-    override fun userPublicID(): String {
-        return sessionID
-    }
-
+    override fun userPublicID() = sessionID
+    override fun isBot() = false
 }
 
 class WizardTest {

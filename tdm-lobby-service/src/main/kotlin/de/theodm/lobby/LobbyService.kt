@@ -1,39 +1,17 @@
 package de.theodm
 
-import de.theodm.storage.LobbyStorage
+import de.theodm.lobby.Lobby
+import de.theodm.lobby.storage.LobbyStorage
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import mu.KotlinLogging
 import java.time.Instant
 import java.util.*
-import kotlin.random.Random
-
-/**
- * Erstellt eine zufällige Zeichenfolge
- * aus den verfügbaren Zeichensatz [availableChars]
- * mit der Länge [length];
- */
-fun randomString(
-        availableChars: String,
-        length: Int
-): String {
-    require(availableChars.length >= 2) { "availableChars.length >= 2" }
-    require(length > 0) { "length > 0" }
-
-    var resultStr = ""
-    while (resultStr.length < length) {
-        val charIndex = Random
-                .Default
-                .nextInt(0, availableChars.length - 1)
-
-        resultStr += availableChars[charIndex]
-    }
-
-    return resultStr
-}
 
 interface Participant {
     fun userPublicID(): String
+    fun isBot(): Boolean
+    fun botType(): String?
 }
 
 typealias LobbyID = String
@@ -59,17 +37,6 @@ class OnlyHostIsAllowedToChangeSettingsException(
 class OnlyHostIsAllowedToChangeParticipantOrderException(
     lobby: LobbyID,
 ) : Exception("Nur der Host darf die Reihenfolge der Teilnehmer der Lobby $lobby verändern")
-
-
-data class OutgoingLobby(
-        val creationTime: Instant,
-        val id: LobbyID,
-        val host: Participant,
-        val participants: List<Participant>,
-        val isInGame: Boolean
-) {
-
-}
 
 sealed class GameAndSettings {
     object WizardGameAndSettings : GameAndSettings() {
@@ -115,115 +82,6 @@ data class ShortLobbyInfo(
     val isInGame: Boolean
 )
 
-data class Lobby(
-        val creationTime: Instant,
-        val id: LobbyID,
-        val host: Participant,
-        val participants: List<Participant>,
-        val participantsConnectivityInfo: Map<Participant, Connectivity>,
-        val isInGame: Boolean = false,
-        val settings: LobbySettings
-) {
-    fun toShortLobbyInfo(): ShortLobbyInfo {
-        return ShortLobbyInfo(
-            creationTime,
-            id,
-            host,
-            participants,
-            participantsConnectivityInfo,
-            isInGame
-        )
-    }
-
-    fun participantLeave(participant: Participant): Lobby? {
-        if (!participants.contains(participant)) {
-            log.trace { "[Lobby#${id}] $participant ist kein Teilnehmer der Lobby." }
-            throw ParticipantNotInLobbyException(id, participant)
-        }
-
-        val newLobby = copy(
-                participants = participants - participant
-        )
-
-        if (host == participant) {
-            log.trace { "[Lobby#${id}] Host hat die Lobby verlassen." }
-
-            if (newLobby.participants.isEmpty()) {
-                log.trace { "[Lobby#${id}] Es gibt keinen Teilnehmer mehr in der Lobby." }
-
-                return null
-            }
-
-            log.trace { "[Lobby#${id}] ${newLobby.participants[0]} ist nun neuer Host." }
-
-            // Nächster Spieler ist nun Host
-            return newLobby.copy(host = newLobby.participants[0])
-        }
-
-        return newLobby
-    }
-
-    fun participantJoin(participant: Participant): Lobby {
-        if (participants.contains(participant)) {
-            log.debug { "[Lobby#${id}] Benutzer $participant ist der Lobby bereits beigetreten." }
-
-            return this
-        }
-
-        return copy(
-                participants = participants + participant,
-                participantsConnectivityInfo = participantsConnectivityInfo + (participant to Connectivity.Disconnected)
-        )
-    }
-
-    fun updateConnectivity(participant: Participant, newConnectivity: Connectivity): Lobby {
-        if (!this.participants.contains(participant)) {
-            log.debug { "[Lobby#${id}] Benutzer $participant befindet sich nicht in der Lobby." }
-            throw ParticipantNotInLobbyException(this.id, participant)
-        }
-
-        return copy(
-            participantsConnectivityInfo = participantsConnectivityInfo + (participant to newConnectivity)
-        )
-    }
-
-    /**
-     * @param newOrder Liste alle öffentlichen IDs in der Spielerliste mit neuer Sortierung.
-     */
-    fun updatePlayerOrder(
-        caller: Participant,
-        newOrder: List<String>
-    ): Lobby {
-        if (caller != host) {
-            log.debug { "[Lobby#${id}] Benutzer $caller ist nicht der Host der Lobby und darf die Reihenfolge der Benutzer nicht ändern." }
-            throw OnlyHostIsAllowedToChangeParticipantOrderException(this.id)
-        }
-
-        log.trace { "[Lobby#${id}] Alte Reihenfolge der Benutzer: $participants" }
-
-        val newParticipantsList = participants
-            .sortedBy { newOrder.indexOf(it.userPublicID()) }
-
-        log.trace { "[Lobby#${id}] Neue Reihenfolge der Benutzer: $newParticipantsList" }
-
-        return copy(
-            participants = newParticipantsList
-        )
-    }
-
-    fun updateLobbySettings(caller: Participant, newLobbySettings: LobbySettings): Lobby {
-        if (caller != host) {
-            log.debug { "[Lobby#${id}] Benutzer $caller ist nicht der Host der Lobby und darf die Einstellungen nicht ändern." }
-            throw OnlyHostIsAllowedToChangeSettingsException(this.id)
-        }
-
-        return copy(
-            settings = newLobbySettings
-        )
-    }
-
-}
-
 val log = KotlinLogging.logger { }
 
 class MaxNumberOfLobbiesException(
@@ -244,6 +102,8 @@ class UserIsInAnotherLobbyException(lobbyCode: String): Exception("Sie befinden 
 //    val lobbyGame:
 //)
 
+
+
 interface Game {
     fun isGameStartAllowed(lobby: Lobby): Boolean
     fun startGame(lobby: Lobby)
@@ -251,16 +111,17 @@ interface Game {
     fun gameFinishedStream(lobby: Lobby): Single<Unit>
 }
 
-// ToDo: Ein Benutzer darf nicht in mehreren Lobbys gleichzeitig sein.
 class LobbyService(
     private val maxLobbies: Int,
     private val lobbyStorage: LobbyStorage,
 
     private val game: Game
 ) {
-    fun lobbyStream(lobbyCode: String): Observable<Optional<Lobby>> = lobbyStorage
+    fun lobbyStream(lobbyCode: String): Observable<Lobby> = lobbyStorage
         .lobbiesStream()
         .map { lobbies -> Optional.ofNullable(lobbies.singleOrNull { it.id == lobbyCode }) }
+        .takeUntil { lobby -> lobby.isEmpty }
+        .map { lobby -> lobby.get() }
         .distinctUntilChanged()
 
     fun lobbiesStream(): Observable<List<Lobby>> = lobbyStorage
@@ -272,17 +133,6 @@ class LobbyService(
         .map { lobbies -> lobbies.map { it.toShortLobbyInfo() } }
         .distinctUntilChanged()
 
-//    /**
-//     * Gibt alle öffentlichen Lobbies, welche gerade bestehen zurück.
-//     */
-//    fun getPublicLobbies(): List<ShortLobbyInfo> {
-//        log.trace { "[Lobby#all] Es sollen alle Lobbies zurückgegeben werden." }
-//
-//        return lobbyStorage
-//            .getAllLobbies()
-//            .map { it.toShortLobbyInfo() }
-//    }
-
     fun createLobby(
             host: Participant
     ): LobbyID {
@@ -291,7 +141,7 @@ class LobbyService(
         requireParticipantIsNotInAnotherLobby(host, null)
 
         if (lobbyStorage.numberOfLobbies() >= maxLobbies) {
-            log.debug { "[Lobby#new] Es sind bereits zuviele Lobbys aktiv (${lobbyStorage.numberOfLobbies()}/$maxLobbies)." }
+            log.debug { "[Lobby#new] Es sind bereits zu viele Lobbys aktiv (${lobbyStorage.numberOfLobbies()}/$maxLobbies)." }
 
             throw MaxNumberOfLobbiesException(maxLobbies)
         }
@@ -320,14 +170,10 @@ class LobbyService(
 
         log.debug { "[Lobby#${newLobbyId}] Lobby-ID: $newLobbyId" }
 
-        val newLobby = Lobby(
+        val newLobby = Lobby.create(
                 creationTime = Instant.now(),
-                id = newLobbyId,
+                lobbyID = newLobbyId,
                 host = host,
-                participants = listOf(host),
-                isInGame = false,
-                participantsConnectivityInfo = mapOf(host to Connectivity.Disconnected),
-                settings = LobbySettings(true, GameAndSettings.WizardGameAndSettings)
         )
 
         lobbyStorage.createLobby(newLobby)
@@ -337,27 +183,49 @@ class LobbyService(
         return newLobbyId
     }
 
-//    fun getLobbyIfParticipant(
-//        caller: Participant,
-//        lobbyID: LobbyID
-//    ): Lobby {
-//        log.trace { "[Lobby#${lobbyID}] Teilnehmer $caller versucht die Daten der Lobby $lobbyID zu lesen." }
-//
-//        val lobby = lobbyStorage
-//            .getLobbyByID(lobbyID)
-//
-//        if (!lobby.participants.contains(caller)) {
-//            throw IllegalStateException("Teilnehmer $caller ist kein Teilnehmer der Lobby ${lobbyID}.")
-//        }
-//
-//        return lobby
-//    }
+    private fun requireParticipantIsNotInAnotherLobby(participant: Participant, lobbyOfAction: LobbyID?) {
+        val otherLobbyOfUser = lobbyStorage
+            .getLobbyByUser(participant)
 
-    private fun updateLobby(lobbyCode: LobbyID, updateLobbyBlock: (oldLobby: Lobby) -> Lobby) {
+        if (otherLobbyOfUser != null && lobbyOfAction != otherLobbyOfUser.id) {
+            log.debug { "[Lobby#new] Benutzer $participant ist bereits in der Lobby ${otherLobbyOfUser.id}" }
+
+            throw UserIsInAnotherLobbyException(otherLobbyOfUser.id)
+        }
+    }
+
+    private fun requireIsHost(participant: Participant, lobbyOfAction: Lobby) {
+        if (lobbyOfAction.host != participant) {
+            throw OnlyHostIsAllowedToChangeSettingsException(lobbyOfAction.id)
+        }
+    }
+
+    private fun requireIsParticipant(participant: Participant, lobbyOfAction: Lobby) {
+        if (!lobbyOfAction.participants.contains(participant)) {
+            throw ParticipantNotInLobbyException(lobbyOfAction.id, participant)
+        }
+    }
+
+    private fun requireGameNotStarted(lobbyOfAction: Lobby) {
+        if (lobbyOfAction.isInGame) {
+            throw GameAlreadyStartedException()
+        }
+    }
+
+    private fun updateLobby(lobbyCode: LobbyID, updateLobbyBlock: (oldLobby: Lobby) -> Lobby?) {
         return lobbyStorage
             .getLobbyByID(lobbyCode)
             .let {
-                lobbyStorage.updateLobby(updateLobbyBlock(it))
+                val lobby = updateLobbyBlock(it)
+
+                if (lobby == null) {
+                    lobbyStorage.removeLobbyByID(it.id)
+
+                    log.info { "[Lobby#${lobbyCode}] Lobby aufgelöst. (Keine Teilnehmer mehr)" }
+                    return
+                }
+
+                lobbyStorage.updateLobby(lobby)
             }
     }
 
@@ -373,7 +241,7 @@ class LobbyService(
             requireIsHost(caller, oldLobby)
 
             return@updateLobby oldLobby
-                .updateLobbySettings(caller, lobbySettings)
+                .updateLobbySettings(lobbySettings)
         }
 
         log.debug { "[Lobby#${lobbyID}] Der Teilnehmer $caller hat die Lobby-Einstellungen auf $lobbySettings geändert." }
@@ -409,33 +277,10 @@ class LobbyService(
             requireIsHost(caller, oldLobby)
 
             return@updateLobby oldLobby
-                .updatePlayerOrder(caller, newPlayerOrder)
+                .updatePlayerOrder(newPlayerOrder)
         }
 
         log.debug { "[Lobby#${lobbyID}] Der Teilnehmer $caller hat die Reihenfolge der Benutzer geändert." }
-    }
-
-    private fun requireIsHost(participant: Participant, lobbyOfAction: Lobby) {
-        if (lobbyOfAction.host != participant) {
-            throw OnlyHostIsAllowedToChangeSettingsException(lobbyOfAction.id)
-        }
-    }
-
-    private fun requireIsParticipant(participant: Participant, lobbyOfAction: Lobby) {
-        if (!lobbyOfAction.participants.contains(participant)) {
-            throw ParticipantNotInLobbyException(lobbyOfAction.id, participant)
-        }
-    }
-
-    private fun requireParticipantIsNotInAnotherLobby(participant: Participant, lobbyOfAction: LobbyID?) {
-        val otherLobbyOfUser = lobbyStorage
-            .getLobbyByUser(participant)
-
-        if (otherLobbyOfUser != null && lobbyOfAction != otherLobbyOfUser.id) {
-            log.debug { "[Lobby#new] Benutzer $participant ist bereits in der Lobby ${otherLobbyOfUser.id}" }
-
-            throw UserIsInAnotherLobbyException(otherLobbyOfUser.id)
-        }
     }
 
     fun participantJoin(
@@ -455,17 +300,70 @@ class LobbyService(
                 return@updateLobby oldLobby
             }
 
-            if (oldLobby.isInGame) {
-                log.debug { "[Lobby#${lobby}] Die Lobby wurde bereits gestartet. Teilnehmer kann nicht mehr beitreten." }
-
-                throw CannotJoinStartedGameException(lobby)
-            }
+            requireGameNotStarted(oldLobby)
 
             return@updateLobby oldLobby
-                .participantJoin(joiningParticipant)
+                .addParticipant(joiningParticipant)
         }
 
         log.info { "[Lobby#${lobby}] Teilnehmer ist beigetreten: $joiningParticipant" }
+    }
+
+    fun botJoin(
+        caller: Participant,
+        lobbyID: LobbyID,
+        botDef: String
+    ) {
+        log.trace { "[Lobby#${lobbyID}] Der Teilnehmer $caller versucht, der Lobby den Bot $botDef hinzuzufügen." }
+
+        val botPublicID = UUID
+            .randomUUID()
+            .toString()
+
+        val botParticipant = BotParticipant(
+            uniqueID = botPublicID,
+            name = botDef + randomString("123456790", 2),
+            botType = botDef
+        )
+
+        updateLobby(lobbyID) {
+            oldLobby ->
+            requireIsHost(caller, oldLobby)
+            requireGameNotStarted(oldLobby)
+
+
+            val newLobby = oldLobby.addParticipant(
+                botParticipant
+            )
+
+            return@updateLobby newLobby
+        }
+
+
+        log.info { "[Lobby#${lobbyID}] Bot ist beigetreten: $botDef" }
+    }
+
+    fun kickPlayer(
+        caller: Participant,
+        lobbyID: LobbyID,
+        playerToBeKickedPublicID: String
+    ) {
+        log.trace { "[Lobby#${lobbyID}] Der Teilnehmer $caller versucht, der Lobby den Spieler mit der ID $playerToBeKickedPublicID zu löschen." }
+
+        updateLobby(lobbyID) {
+            oldLobby ->
+            requireIsHost(caller, oldLobby)
+            requireGameNotStarted(oldLobby)
+
+            val oldParticipant = oldLobby
+                .participants
+                .single { it.userPublicID() == playerToBeKickedPublicID }
+
+            val newLobby = oldLobby
+                .removeParticipant(oldParticipant)
+
+            return@updateLobby newLobby
+        }
     }
 
     fun participantLeave(
@@ -480,7 +378,7 @@ class LobbyService(
         requireIsParticipant(leavingParticipant, oldLobby)
 
         val newLobby = oldLobby
-            .participantLeave(leavingParticipant)
+            .removeParticipant(leavingParticipant)
 
         if (newLobby == null) {
             lobbyStorage.removeLobbyByID(lobbyCode)

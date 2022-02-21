@@ -87,10 +87,38 @@ data class Stich internal constructor(
         return cards
     }
 
+    fun allowedToPlayCards(
+        handOfPlayer: List<WizardCard>
+    ): List<WizardCard> {
+        // In einem leeren Stich darf immer eine beliebige Karte gespielt werden.
+        if (cards.isEmpty() || cards.size == players.count())
+            return handOfPlayer
+
+        val stichColor = stichColor
+
+        if (stichColor == StichColor.Any) {
+            return handOfPlayer
+        }
+
+        // Hat der Spieler noch eine Karte der Stichfarbe?
+        // Dann muss er bekennen!
+        val hasCardsOfStichColor = handOfPlayer
+            .filterIsInstance<NumberColorCard>()
+            .any { stichColor == StichColor.fromCardColor(it.color) }
+
+        if (!hasCardsOfStichColor) {
+            return handOfPlayer
+        }
+
+        return handOfPlayer
+            .filter { it is Joker || it is Null || it is NumberColorCard && stichColor == StichColor.fromCardColor(it.color) }
+    }
+
     fun isAllowedToPlayCard(
         handOfPlayer: List<WizardCard>,
         card: WizardCard
     ): Boolean {
+        // ToDo: Durch allowedToPlayCards ersetzen?
         // In einem leeren Stich darf immer eine beliebige Karte gespielt werden.
         if (cards.isEmpty() || cards.size == players.count())
             return true

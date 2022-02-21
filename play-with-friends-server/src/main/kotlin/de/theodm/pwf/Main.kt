@@ -2,10 +2,11 @@ package de.theodm.pwf
 
 import com.google.inject.*
 import de.theodm.*
-import de.theodm.storage.InMemoryLobbyStorage
+import de.theodm.lobby.Lobby
+import de.theodm.lobby.storage.InMemoryLobbyStorage
 import de.theodm.pwf.routing.AuthHandler
 import de.theodm.pwf.routing.SessionDoesNotExistException
-import de.theodm.storage.LobbyStorage
+import de.theodm.lobby.storage.LobbyStorage
 import de.theodm.pwf.routing.lobby.LobbyEndpoints
 import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsLobby
@@ -19,7 +20,6 @@ import de.theodm.pwf.user.UserManager
 import de.theodm.pwf.utils.repeatLastValueDuringSilence
 import de.theodm.wizard.*
 import io.javalin.Javalin
-import io.javalin.http.ExceptionHandler
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJackson
 import io.javalin.plugin.openapi.OpenApiOptions
@@ -30,14 +30,10 @@ import io.javalin.plugin.openapi.ui.ReDocOptions
 import io.javalin.plugin.openapi.ui.SwaggerOptions
 import io.javalin.websocket.WsCloseContext
 import io.javalin.websocket.WsContext
-import io.javalin.websocket.WsMessageContext
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private val log = KotlinLogging.logger { }
@@ -108,12 +104,17 @@ class InLobbyWebSocket @Inject constructor(
 
         lobbyService
             .lobbyStream(lobbyCode)
-            .map { lobby -> WsLobbyUpdated(lobby.orElse(null)?.toRsLobby()) }
+            .map { lobby -> WsLobbyUpdated(lobby.toRsLobby()) }
             .repeatLastValueDuringSilence()
-            .subscribe { lobbyUpdate ->
-                log.debug { "Send lobby update to ${authUser.userName} with data ${lobbyUpdate}" }
+            .subscribe ({ lobbyUpdate ->
+                log.debug { "Send lobby update to ${authUser.userName} with data $lobbyUpdate" }
+
                 wsContext.send(lobbyUpdate)
-            }
+            }, {}, {
+                log.debug { "Send lobby update to ${authUser.userName} with data null" }
+
+                wsContext.send(WsLobbyUpdated(null))
+            })
 
         wizardService
             .wizardStream(lobbyCode)
@@ -226,6 +227,8 @@ class AppMain @Inject constructor(
         app.routes {
 
             app.exception(Exception::class.java) { exception, ctx ->
+                log.underlyingLogger.error("error: ", exception)
+
                 ctx.json(exception.toRsException())
                 ctx.status(500)
             }
@@ -305,6 +308,24 @@ class AppMain @Inject constructor(
                     authHandler.handleRoute(it),
                     it.pathParam("lobbyID"),
                     it.bodyAsClass()
+                )
+            })
+
+            app.post("/api/lobby/{lobbyID}/addBot", documented(
+                document()
+                    .operation {
+                        it.description("Fügt einen Bot zur Lobby hinzu.")
+                        it.operationId("addBotToLobby")
+                    }
+                    .header<String>("Authorization")
+                    .queryParam<String>("botType")
+                    .pathParam<String>("lobbyID")
+                    .result("200", Unit::class.java)
+            ) {
+                lobbyEndpoints.addBot(
+                    authHandler.handleRoute(it),
+                    it.pathParam("lobbyID"),
+                    it.queryParam("botType")!!
                 )
             })
 

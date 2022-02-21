@@ -85,6 +85,14 @@
         }
     }
 
+    async function addBot(botType: string) {
+        try {
+            await lobbySocket?.addBot(botType);
+        } catch (e) {
+            currentError = createError(e);
+        }
+    }
+
     async function startGame() {
         try {
             await lobbySocket?.startGame()
@@ -128,6 +136,7 @@
             onParticipantsChanged={updatePlayerOrder}
             onSettingsChanged={() => {}}
             ownPublicID={playerStore.getPublicID()}
+            onAddBot={addBot}
     />
 {:else}
     <Wizard lobbySocket={lobbySocket} playerStore={playerStore}/>

@@ -121,7 +121,7 @@ data class OpenWizardRound internal constructor(
         /**
          * Aktueller Spieler, der an der Reihe ist.
          */
-        private val currentPlayer: WizardPlayer,
+        val currentPlayer: WizardPlayer,
 
         private val bets: Bets,
         private val handsOfPlayers: HandsOfPlayers,

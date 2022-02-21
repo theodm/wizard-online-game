@@ -1,5 +1,6 @@
 package de.theodm.pwf.routing.model.wizard
 
+import de.theodm.Participant
 import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsParticipant
 import de.theodm.pwf.routing.model.RsParticipant
@@ -16,7 +17,7 @@ data class RsStich(
 
 fun Stich.toRsStich(): RsStich {
     return RsStich(
-        startPlayer = (this.startPlayer as LobbyParticipant).toRsParticipant(),
+        startPlayer = (this.startPlayer as Participant).toRsParticipant(),
         playedCards = this.cards.map { it.toRsWizardCard() },
         cmpPlayerToCardMap = this.playerToCardMap()
             .mapKeys { it.key.userPublicID() }

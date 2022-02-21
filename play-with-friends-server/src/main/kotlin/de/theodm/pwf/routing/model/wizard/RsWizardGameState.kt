@@ -3,6 +3,7 @@ package de.theodm.pwf.routing.model.wizard
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import de.theodm.Participant
 import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsParticipant
 import de.theodm.pwf.routing.model.RsParticipant
@@ -61,7 +62,7 @@ fun RoundStateForPlayerFirstRound.toRsRoundStateForPlayerFirstRound(
     return RsRoundStateForPlayerFirstRound(
         phase = this.phase,
         bets = this.bets.mapKeys { it.key.userPublicID() },
-        currentPlayer = (this.currentPlayer as LobbyParticipant).toRsParticipant(),
+        currentPlayer = (this.currentPlayer as Participant).toRsParticipant(),
         sticheOfPlayer = this.sticheOfPlayer.mapKeys { it.key.userPublicID() },
         trumpColor = this.trumpColor,
         currentStich = this.currentStich.toRsStich(),
@@ -87,7 +88,7 @@ fun RoundStateForPlayerNormalRound.toRsRoundStateForPlayerNormalRound(): RsRound
     return RsRoundStateForPlayerNormalRound(
         phase = this.phase,
         bets = this.bets.mapKeys { it.key.userPublicID() },
-        currentPlayer = (this.currentPlayer as LobbyParticipant).toRsParticipant(),
+        currentPlayer = (this.currentPlayer as Participant).toRsParticipant(),
         sticheOfPlayer = this.sticheOfPlayer.mapKeys { it.key.userPublicID() },
         trumpColor = this.trumpColor,
         currentStich = this.currentStich.toRsStich(),

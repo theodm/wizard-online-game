@@ -1,22 +1,20 @@
 module.exports = {
     content: [
-        "./src/**/*.{html,js,ts,svelte}"
+        "./src/**/*.{html,js,ts,svelte}",
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
         extend: {
             fontSize: {
                 '2xs': ['.50rem', '0.75rem']
             },
-            // screens: {
-            //     'portrait': {'raw': '(orientation: portrait)'},
-            //     'landscape': {'raw': '(orientation: landscape)'},
-            // }
         },
     },
     plugins: [
         require("@tailwindcss/forms"),
         require('daisyui'),
         require('tailwindcss-debug-screens'),
+        require('flowbite/plugin')
     ],
     daisyui: {
         styled: true,

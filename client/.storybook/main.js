@@ -12,5 +12,5 @@ module.exports = {
     "staticDirs": ['../public'],
     "svelteOptions": {
         "preprocess": require("../svelte.config.js").preprocess
-    }
+    },
 }

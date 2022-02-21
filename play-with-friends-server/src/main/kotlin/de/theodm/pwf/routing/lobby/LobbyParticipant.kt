@@ -12,6 +12,12 @@ data class LobbyParticipant(
         return userPublicID
     }
 
+    override fun isBot(): Boolean {
+        return false
+    }
+
+    override fun botType(): String? = null
+
     companion object {
         fun of(user: User) = LobbyParticipant(
             user.userPublicID,

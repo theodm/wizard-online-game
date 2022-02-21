@@ -69,6 +69,14 @@ export class ApiClient {
         });
     }
 
+    async addBot(userPrivateID: string, lobbyCode: string,botType: string) {
+        return await this.api.addBotToLobby({
+            botType: botType,
+            lobbyID: lobbyCode,
+            authorization: "Custom " + userPrivateID
+        })
+    }
+
     async createUser(userName: string) {
         return await this.api.createUser({
             userName: userName,

@@ -44,6 +44,12 @@ import {
     TrumpColorToJSON,
 } from '../models';
 
+export interface AddBotToLobbyRequest {
+    lobbyID: string;
+    authorization?: string;
+    botType?: string;
+}
+
 export interface ChangeNameRequest {
     userName?: string;
     authorization?: string;
@@ -130,6 +136,45 @@ export interface UpdateSettingsRequest {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     * Fügt einen Bot zur Lobby hinzu.
+     * Post api lobby with lobbyid addbot
+     */
+    async addBotToLobbyRaw(requestParameters: AddBotToLobbyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.lobbyID === null || requestParameters.lobbyID === undefined) {
+            throw new runtime.RequiredError('lobbyID','Required parameter requestParameters.lobbyID was null or undefined when calling addBotToLobby.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.botType !== undefined) {
+            queryParameters['botType'] = requestParameters.botType;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters.authorization !== undefined && requestParameters.authorization !== null) {
+            headerParameters['Authorization'] = String(requestParameters.authorization);
+        }
+
+        const response = await this.request({
+            path: `/api/lobby/{lobbyID}/addBot`.replace(`{${"lobbyID"}}`, encodeURIComponent(String(requestParameters.lobbyID))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Fügt einen Bot zur Lobby hinzu.
+     * Post api lobby with lobbyid addbot
+     */
+    async addBotToLobby(requestParameters: AddBotToLobbyRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.addBotToLobbyRaw(requestParameters, initOverrides);
+    }
 
     /**
      * Ändert den Namen des akutell eingeloggten Benutzers.

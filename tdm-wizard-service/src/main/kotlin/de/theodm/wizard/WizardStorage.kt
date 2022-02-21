@@ -8,4 +8,5 @@ interface WizardStorage {
     fun getWizard(lobbyCode: String): WizardGameState
     fun updateWizard(lobbyCode: String, wizard: WizardGameState)
     fun wizardStream(lobbyCode: String): Observable<WizardGameState>
+    fun wizardStream(): Observable<Pair<String, WizardGameState>>
 }
