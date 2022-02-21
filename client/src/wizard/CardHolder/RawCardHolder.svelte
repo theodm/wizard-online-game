@@ -131,7 +131,7 @@
 
         </div>
     {/each}
-    <div class="relative" style={`width: ${getCardWidth(containerBounds) / 2 * (obersteKarte.type === "RsJoker" && trumpColor ? 1.50 : 1)}px;`}>
+    <div class="relative" style={`width: ${getCardWidth(containerBounds) / 2 * (obersteKarte && obersteKarte.type === "RsJoker" && trumpColor ? 1.50 : 1)}px;`}>
 
         {#if obersteKarte}
             <Card card={obersteKarte} style={`width: ${getCardWidth(containerBounds) / 2}px;`} middleText={""}/>
