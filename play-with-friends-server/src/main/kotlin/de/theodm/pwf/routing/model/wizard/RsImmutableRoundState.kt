@@ -1,10 +1,9 @@
 package de.theodm.pwf.routing.model.wizard
 
 import de.theodm.Participant
-import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsParticipant
 import de.theodm.pwf.routing.model.RsParticipant
-import de.theodm.wizard.ImmutableRoundState
+import de.theodm.wizard.game.round.ImmutableRoundState
 
 /**
  * Diese Daten bleiben die ganze Runde über gleich. Beispielsweise

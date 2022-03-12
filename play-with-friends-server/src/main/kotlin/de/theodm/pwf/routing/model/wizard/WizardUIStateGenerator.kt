@@ -2,13 +2,14 @@ package de.theodm.pwf.routing.model.wizard
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.theodm.pwf.routing.lobby.LobbyParticipant
-import de.theodm.wizard.Deck
-import de.theodm.wizard.TrumpColor
-import de.theodm.wizard.WizardGameState
+import de.theodm.wizard.game.deck.Deck
+import de.theodm.wizard.game.card.TrumpColor
 import de.theodm.wizard.card.CardColor
 import de.theodm.wizard.card.Joker
 import de.theodm.wizard.card.NumberColorCard
-import de.theodm.wizard.card.WizardCard
+import de.theodm.wizard.game.WizardGameSettings
+import de.theodm.wizard.game.WizardGameState
+import de.theodm.wizard.game.players.Players
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -33,8 +34,7 @@ fun printGameState(
 
 fun main() {
     var wizardGameState3PlayersLastRound = WizardGameState.initialWithDeckAndRound(
-        hostPlayer = wpSebastian,
-        players = listOf(
+        players = Players(
             wpSebastian,
             wpTabea,
             wpDomi,
@@ -42,14 +42,14 @@ fun main() {
         deck = Deck.from(
             *(1..60).map { Joker("J1") }.toTypedArray()
         ),
-        numberOfCards = 20
+        numberOfCards = 20,
+        gameSettings = WizardGameSettings(hiddenBets = false)
     )
 
     printGameState("wizardGameState3PlayersLastRound.json", wizardGameState3PlayersLastRound)
 
     var wizardGameStateFull = WizardGameState.initialWithDeckAndRound(
-        hostPlayer = wpSebastian,
-        players = listOf(
+        players = Players(
             wpSebastian,
             wpTabea,
             wpDomi,
@@ -58,13 +58,13 @@ fun main() {
             wpSteiner
         ),
         deck = Deck.shuffled().let { it.copy(it.origin + Joker("J1")) },
-        numberOfCards = 10
+        numberOfCards = 10,
+        gameSettings = WizardGameSettings(hiddenBets = false)
     )
 
     printGameState("6playerslastround.json", wizardGameStateFull)
 
     var wizardGameState = WizardGameState.initialWithDeck(
-        hostPlayer = wpSebastian,
         players = listOf(
             wpSebastian,
             wpTabea,
@@ -75,7 +75,8 @@ fun main() {
             NumberColorCard(CardColor.Blue, 1),
             NumberColorCard(CardColor.Blue, 2),
             NumberColorCard(CardColor.Blue, 3),
-        )
+        ),
+        gameSettings = WizardGameSettings(hiddenBets = false)
     )
     printGameState("1.json", wizardGameState)
 
@@ -100,9 +101,9 @@ fun main() {
     wizardGameState = wizardGameState.placeCard(wpDomi, NumberColorCard(CardColor.Blue, 1))
     printGameState("8.json", wizardGameState)
 
-    wizardGameState = wizardGameState.finishAndStartNewRoundWithDeck(
-        player = wpSebastian,
-        deck = Deck.from(
+    wizardGameState = wizardGameState
+        .finishRound()
+        .startNewRound(Deck.from(
             Joker("J1"),
             NumberColorCard(CardColor.Blue, 2),
             NumberColorCard(CardColor.Yellow, 2),
@@ -110,8 +111,8 @@ fun main() {
             NumberColorCard(CardColor.Blue, 3),
             NumberColorCard(CardColor.Blue, 1),
             NumberColorCard(CardColor.Yellow, 1),
-        )
-    )
+        ))
+
     printGameState("9.json", wizardGameState)
 
     wizardGameState = wizardGameState.selectTrump(wpTabea, TrumpColor.Red)

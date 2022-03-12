@@ -1,7 +1,7 @@
 package de.theodm.pwf.routing.model.wizard
 
-import de.theodm.wizard.WizardGameState
-import de.theodm.wizard.WizardPlayer
+import de.theodm.wizard.game.WizardGameState
+import de.theodm.wizard.game.players.WizardPlayer
 
 /**
  * Ausschnitt des Spielgeschehens, den ein einzelner Spieler
@@ -21,7 +21,7 @@ data class RsWizardGameStateForPlayer(
 
 fun WizardGameState.getRsWizardGameStateForPlayer(forPlayer: WizardPlayer): RsWizardGameStateForPlayer {
     return RsWizardGameStateForPlayer(
-        this.oldRounds.map { it.toRsFinishedWizardRound(this.players, this.oldRounds) },
-        this.currentRound.toRsOpenWizardRound(forPlayer)
+        this.previousRounds.map { it.toRsFinishedWizardRound(this.players, this.previousRounds) },
+        this.currentRound.toRsOpenWizardRound(this.gameSettings, this.players, forPlayer)
     )
 }

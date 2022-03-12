@@ -1,11 +1,7 @@
 package de.theodm.pwf.routing.model.wizard
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import de.theodm.wizard.TrumpColor
+import de.theodm.wizard.game.card.TrumpColor
 import de.theodm.wizard.card.*
-import io.javalin.plugin.openapi.dsl.oneOf
 
 data class RsWizardCard(
     val type: String,

@@ -61,7 +61,7 @@
 
 
         <div class="flex items-center justify-end">
-            <Dropdown caption="Bot hinzufügen" items={[{ label: "RandomBot", key: "RandomBot" }]} onItemClicked={(botType) => onAddBot(botType)}>
+            <Dropdown caption="Bot hinzufügen" items={[{ label: "RandomBot", key: "RandomBot" }, { label: "MaxPointsBot", key: "MaxPointsBot" }]} onItemClicked={(botType) => onAddBot(botType)}>
 
             </Dropdown>
         </div>

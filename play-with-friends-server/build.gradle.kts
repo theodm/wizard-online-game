@@ -34,6 +34,8 @@ dependencies {
     "implementation"("io.reactivex.rxjava3:rxjava:3.1.3")
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
 
+// https://mvnrepository.com/artifact/net.sf.py4j/py4j
+    implementation("net.sf.py4j:py4j:0.10.9.3")
 
     "implementation"("com.fasterxml.jackson.core:jackson-databind:2.13.1")
 //    "implementation"("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.1")

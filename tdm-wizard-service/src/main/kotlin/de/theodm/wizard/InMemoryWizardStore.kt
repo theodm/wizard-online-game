@@ -1,5 +1,6 @@
 package de.theodm.wizard
 
+import de.theodm.wizard.game.WizardGameState
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.util.concurrent.ConcurrentHashMap

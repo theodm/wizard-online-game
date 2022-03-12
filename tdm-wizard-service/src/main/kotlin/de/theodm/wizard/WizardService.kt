@@ -1,12 +1,19 @@
 package de.theodm.wizard
 
+import de.theodm.pwf.bot.*
 import de.theodm.wizard.card.WizardCard
+import de.theodm.wizard.game.WizardGameSettings
+import de.theodm.wizard.game.WizardGameState
+import de.theodm.wizard.game.card.TrumpColor
+import de.theodm.wizard.game.players.BotWizardPlayer
+import de.theodm.wizard.game.players.WizardPlayer
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import mu.KotlinLogging
+import py4j.ClientServer
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.round
+
 
 sealed class BotAction
 
@@ -26,58 +33,9 @@ data class BotActionPlaceCardInNormalRound(
 
 object BotActionStartNewRound: BotAction()
 
-fun doAction(
-    wizardService: WizardService,
-    lobbyCode: String,
-    player: WizardPlayer,
-    action: BotAction
-) {
-    when (action) {
-        is BotActionSelectTrump ->  wizardService.selectTrumpColor(lobbyCode, player, action.trumpColor)
-        is BotActionPlaceBet ->  wizardService.placeBet(lobbyCode, player, action.bet)
-        is BotActionPlaceCardInFirstRound ->  wizardService.playSingleCard(lobbyCode, player)
-        is BotActionPlaceCardInNormalRound ->  wizardService.playCard(lobbyCode, player, action.card)
-        is BotActionStartNewRound ->  wizardService.finishRound(lobbyCode, player)
-
-    }
-
-
-}
 
 private val log = KotlinLogging.logger {  }
 
-fun randomBot(
-    immutableRoundState: ImmutableRoundState,
-    roundStateForPlayer: RoundStateForPlayer
-): BotAction {
-    when (roundStateForPlayer.phase) {
-        OpenWizardRound.Phase.SelectTrumpPhase -> {
-            return BotActionSelectTrump(listOf(TrumpColor.Blue, TrumpColor.Red, TrumpColor.Green, TrumpColor.Yellow).random())
-        }
-        OpenWizardRound.Phase.BettingPhase -> {
-            val allowedBets = Bets(roundStateForPlayer.bets)
-                .allowedBets(roundStateForPlayer.currentPlayer, immutableRoundState.numberOfCards)
-
-            return BotActionPlaceBet(allowedBets.random())
-        }
-        OpenWizardRound.Phase.PlayingPhase -> {
-            if (roundStateForPlayer is RoundStateForPlayerFirstRound) {
-                return BotActionPlaceCardInFirstRound
-            }
-
-            require(roundStateForPlayer is RoundStateForPlayerNormalRound)
-
-            val allowedCards = roundStateForPlayer
-                .currentStich
-                .allowedToPlayCards(roundStateForPlayer.ownCards)
-
-            return BotActionPlaceCardInNormalRound(allowedCards.random())
-        }
-        OpenWizardRound.Phase.RoundEnded -> {
-            return BotActionStartNewRound
-        }
-    }
-}
 
 class WizardService @Inject constructor(
     private val wizardStorage: WizardStorage
@@ -92,6 +50,10 @@ class WizardService @Inject constructor(
         .firstOrError()
 
     init {
+        val clientServer = ClientServer(null)
+        val modelEvaluator: ModelEvaluator = clientServer
+            .getPythonServerEntryPoint(arrayOf<Class<*>>(ModelEvaluator::class.java)) as ModelEvaluator
+
         wizardStorage
             .wizardStream()
             .filter {
@@ -103,8 +65,8 @@ class WizardService @Inject constructor(
                     return@filter false
                 }
 
-                if (currentRound.currentPlayer.isBot()
-                    && currentRound.currentPlayer.botType() == "RandomBot") {
+                if (currentRound.currentPlayer is BotWizardPlayer
+                    && (currentRound.currentPlayer.botType() == "RandomBot" || currentRound.currentPlayer.botType() == "MaxPointsBot")) {
                     return@filter true
                 }
 
@@ -122,25 +84,52 @@ class WizardService @Inject constructor(
                 if (currentRound == null)
                     return@subscribe
 
-                if (currentRound.currentPlayer.isBot()
-                    && currentRound.currentPlayer.botType() == "RandomBot") {
+                if (
+                    currentRound
+                        .currentPlayer is BotWizardPlayer && (currentRound.currentPlayer.botType() == "RandomBot" || currentRound.currentPlayer.botType() == "MaxPointsBet")
+                ) {
                     log.info { "Bot's turn: ${currentRound.currentPlayer}" }
 
-                    val botAction = randomBot(
-                        currentRound.immutableRoundState(),
-                        currentRound.viewForPlayer(currentRound.currentPlayer)
-                    )
+                    val bot = when (currentRound.currentPlayer.botType()) {
+                        "RandomBot" -> RandomBot()
+                        "MaxPointsBot" -> RandomBot()
+                        else -> TODO()
+                    }
+                    try {
+                        updateGameState(lobbyCode) { wizardGameState ->
+                            val viewForPlayer = wizardGameState
+                                .currentRound!!
+                                .viewForPlayer(currentRound.currentPlayer)
 
-                    log.info { "Bot's action: $botAction" }
+                            val immutableRoundState = wizardGameState
+                                .currentRound!!
+                                .immutableRoundState(wizardGameState.gameSettings, wizardGameState.players)
 
-                    doAction(this, lobbyCode, currentRound.currentPlayer, botAction)
+                            return@updateGameState wizardGameState
+                                .applyBotAction(viewForPlayer, immutableRoundState, bot)
+                        }
+                    } catch(npe: Exception) {
+                        log.error { npe }
+                    }
+
                 }
 
             }
     }
 
+    private fun updateGameState(
+        lobbyCode: String,
+        block: (wizardState: WizardGameState) -> WizardGameState
+    ) {
+        val gameState = wizardStorage.getWizard(lobbyCode)
+
+        val newGameState = block(gameState)
+
+        wizardStorage.updateWizard(lobbyCode, newGameState)
+    }
+
     fun startGame(lobbyCode: String, players: List<WizardPlayer>) {
-        val gameState = WizardGameState.initial(players[0], players);
+        val gameState = WizardGameState.initial(WizardGameSettings(hiddenBets = false), players)
 
         wizardStorage.createWizard(lobbyCode, gameState)
     }
@@ -148,7 +137,7 @@ class WizardService @Inject constructor(
     fun playSingleCard(lobbyCode: String, player: WizardPlayer) {
         val gameState = wizardStorage.getWizard(lobbyCode)
 
-        val newGameState = gameState.placeSingleCard(player)
+        val newGameState = gameState.placeCardInFirstRound(player)
 
         wizardStorage.updateWizard(lobbyCode, newGameState)
     }
@@ -180,7 +169,9 @@ class WizardService @Inject constructor(
     fun finishRound(lobbyCode: String, player: WizardPlayer) {
         val gameState = wizardStorage.getWizard(lobbyCode)
 
-        val newGameState = gameState.finishAndStartNewRound(player)
+        val newGameState = gameState
+            .finishRound()
+            .startNewRound()
 
         wizardStorage.updateWizard(lobbyCode, newGameState)
     }

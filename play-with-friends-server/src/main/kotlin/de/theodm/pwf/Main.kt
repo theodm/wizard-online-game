@@ -12,6 +12,8 @@ import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsLobby
 import de.theodm.pwf.routing.lobby.toRsShortLobbyInfo
 import de.theodm.pwf.routing.model.*
+import de.theodm.pwf.routing.model.bot.RsGenome
+import de.theodm.pwf.routing.model.bot.RsTestFFNRequest
 import de.theodm.pwf.routing.model.wizard.*
 import de.theodm.pwf.routing.user.UserEndpoints
 import de.theodm.pwf.routing.wizard.WizardEndpoints
@@ -19,6 +21,8 @@ import de.theodm.pwf.user.User
 import de.theodm.pwf.user.UserManager
 import de.theodm.pwf.utils.repeatLastValueDuringSilence
 import de.theodm.wizard.*
+import de.theodm.wizard.game.card.TrumpColor
+import de.theodm.wizard.game.players.WizardPlayer
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJackson
@@ -283,6 +287,25 @@ class AppMain @Inject constructor(
                     }
             }
 //
+//            app.post("/api/testFFN") {
+//                val rq = it.bodyAsClass<RsTestFFNRequest>()
+//
+//                val ffNetwork = createFFNetwork(
+//                    rq.genome.toGenome(),
+//                    rq.genome.inputNodeKeys.toSet(),
+//                    rq.genome.outputNodeKeys.toSet()
+//                )
+//
+//                it.json(ffNetwork.activate(rq.inputs))
+//            }
+//
+//            app.post("/api/FFNFirstRound") {
+//                val genome = it.bodyAsClass<RsGenome>()
+//
+//                it.json(evalGameFirstRound(genome))
+//            }
+
+            //
 //            app.get("/api/lobby", documented(document()
 //                .operation {
 //                    it.description("Gibt die aktuell laufenden Lobbies zurück.")

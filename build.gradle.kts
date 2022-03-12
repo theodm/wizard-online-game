@@ -1,8 +1,8 @@
 import java.nio.file.Paths
 
 plugins {
-    kotlin("jvm") version "1.4.30" apply false
-    kotlin("plugin.serialization") version "1.4.30" apply false
+    kotlin("jvm") version "1.5.30" apply false
+    kotlin("plugin.serialization") version "1.5.30" apply false
 
     id("org.openapi.generator") version "5.3.0"
 }

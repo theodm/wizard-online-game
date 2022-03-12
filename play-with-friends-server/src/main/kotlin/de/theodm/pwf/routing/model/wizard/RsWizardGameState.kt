@@ -4,10 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import de.theodm.Participant
-import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.lobby.toRsParticipant
 import de.theodm.pwf.routing.model.RsParticipant
 import de.theodm.wizard.*
+import de.theodm.wizard.game.card.TrumpColor
+import de.theodm.wizard.game.players.Players
+import de.theodm.wizard.game.players.WizardPlayer
+import de.theodm.wizard.game.round.OpenWizardRound
+import de.theodm.wizard.game.round.RoundStateForPlayer
+import de.theodm.wizard.game.round.RoundStateForPlayerFirstRound
+import de.theodm.wizard.game.round.RoundStateForPlayerNormalRound
+import de.theodm.wizard.game.stich.toPlayerSticheMap
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(
@@ -35,11 +42,12 @@ sealed class RsRoundStateForPlayer {
 }
 
 fun RoundStateForPlayer.toRsRoundStateForPlayer(
+    players: Players,
     localPlayer: WizardPlayer
 ): RsRoundStateForPlayer {
     return when (this) {
-        is RoundStateForPlayerFirstRound -> this.toRsRoundStateForPlayerFirstRound(localPlayer)
-        is RoundStateForPlayerNormalRound -> this.toRsRoundStateForPlayerNormalRound()
+        is RoundStateForPlayerFirstRound -> this.toRsRoundStateForPlayerFirstRound(players, localPlayer)
+        is RoundStateForPlayerNormalRound -> this.toRsRoundStateForPlayerNormalRound(players)
         else -> TODO("Fehlt")
     }
 }
@@ -57,18 +65,19 @@ data class RsRoundStateForPlayerFirstRound(
 ) : RsRoundStateForPlayer()
 
 fun RoundStateForPlayerFirstRound.toRsRoundStateForPlayerFirstRound(
+    players: Players,
     localPlayer: WizardPlayer
 ): RsRoundStateForPlayerFirstRound {
     return RsRoundStateForPlayerFirstRound(
         phase = this.phase,
         bets = this.bets.mapKeys { it.key.userPublicID() },
         currentPlayer = (this.currentPlayer as Participant).toRsParticipant(),
-        sticheOfPlayer = this.sticheOfPlayer.mapKeys { it.key.userPublicID() },
+        sticheOfPlayer = this.sticheOfPlayer.toPlayerSticheMap(players, this.trumpColor).mapKeys { it.key.userPublicID() },
         trumpColor = this.trumpColor,
-        currentStich = this.currentStich.toRsStich(),
+        currentStich = this.currentStich.toRsStich(players),
         cardsOfOtherPlayers = this.cardsOfOtherPlayers.mapKeys { it.key.userPublicID() }
             .mapValues { it.value.map { it.toRsWizardCard() } },
-        cmpLocalPlayerHasPlayedCard = this.currentStich.playerToCardMap().containsKey(localPlayer)
+        cmpLocalPlayerHasPlayedCard = this.currentStich.playerToCardMap(players).containsKey(localPlayer)
     )
 }
 
@@ -84,15 +93,15 @@ data class RsRoundStateForPlayerNormalRound(
     val numberOfCardsInHandsOfPlayers: Map<String, Int>
 ) : RsRoundStateForPlayer()
 
-fun RoundStateForPlayerNormalRound.toRsRoundStateForPlayerNormalRound(): RsRoundStateForPlayerNormalRound {
+fun RoundStateForPlayerNormalRound.toRsRoundStateForPlayerNormalRound(players: Players): RsRoundStateForPlayerNormalRound {
     return RsRoundStateForPlayerNormalRound(
         phase = this.phase,
         bets = this.bets.mapKeys { it.key.userPublicID() },
         currentPlayer = (this.currentPlayer as Participant).toRsParticipant(),
-        sticheOfPlayer = this.sticheOfPlayer.mapKeys { it.key.userPublicID() },
+        sticheOfPlayer = this.sticheOfPlayer.toPlayerSticheMap(players, this.trumpColor).mapKeys { it.key.userPublicID() },
         trumpColor = this.trumpColor,
-        currentStich = this.currentStich.toRsStich(),
-        ownCards = this.ownCards.map { it.toRsCardInHand(this.ownCards, this.currentStich) },
+        currentStich = this.currentStich.toRsStich(players),
+        ownCards = this.ownCards.map { it.toRsCardInHand(players, this.ownCards, this.currentStich) },
         numberOfCardsInHandsOfPlayers = this.numberOfCardsInHandsOfPlayers.mapKeys { it.key.userPublicID() }
     )
 }

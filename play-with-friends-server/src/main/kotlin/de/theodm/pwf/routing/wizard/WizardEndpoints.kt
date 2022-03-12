@@ -3,7 +3,7 @@ package de.theodm.pwf.routing.wizard
 import de.theodm.pwf.routing.lobby.LobbyParticipant
 import de.theodm.pwf.routing.model.wizard.RsWizardCard
 import de.theodm.pwf.user.User
-import de.theodm.wizard.TrumpColor
+import de.theodm.wizard.game.card.TrumpColor
 import de.theodm.wizard.WizardService
 import javax.inject.Inject
 

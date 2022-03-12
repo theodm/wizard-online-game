@@ -1,7 +1,9 @@
 package de.theodm.pwf.routing.model.wizard
 
-import de.theodm.wizard.OpenWizardRound
-import de.theodm.wizard.WizardPlayer
+import de.theodm.wizard.game.WizardGameSettings
+import de.theodm.wizard.game.players.Players
+import de.theodm.wizard.game.round.OpenWizardRound
+import de.theodm.wizard.game.players.WizardPlayer
 
 /**
  * Aktuelle Runde oder gerade beendete Runde.
@@ -20,12 +22,16 @@ data class RsOpenWizardRound(
 )
 
 
-fun OpenWizardRound?.toRsOpenWizardRound(forPlayer: WizardPlayer): RsOpenWizardRound? {
+fun OpenWizardRound?.toRsOpenWizardRound(
+    gameSettings: WizardGameSettings,
+    players: Players,
+    forPlayer: WizardPlayer
+): RsOpenWizardRound? {
     if (this == null)
         return null
 
     return RsOpenWizardRound(
-        this.immutableRoundState().toRsImmutableRoundState(),
-        this.viewForPlayer(forPlayer).toRsRoundStateForPlayer(forPlayer)
+        this.immutableRoundState(gameSettings, players).toRsImmutableRoundState(),
+        this.viewForPlayer(forPlayer).toRsRoundStateForPlayer(players, forPlayer)
     )
 }

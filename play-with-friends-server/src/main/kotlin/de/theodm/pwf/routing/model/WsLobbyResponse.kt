@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import de.theodm.pwf.routing.model.wizard.RsWizardGameStateForPlayer
-import de.theodm.wizard.WizardGameState
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(

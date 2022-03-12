@@ -2,7 +2,7 @@ package de.theodm.pwf.routing.lobby
 
 import de.theodm.Participant
 import de.theodm.pwf.user.User
-import de.theodm.wizard.WizardPlayer
+import de.theodm.wizard.game.players.WizardPlayer
 
 data class LobbyParticipant(
     val userPublicID: String,

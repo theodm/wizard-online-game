@@ -1,9 +1,5 @@
 package de.theodm.wizard
 
-fun SHOULD_NOT_HAPPEN(): Nothing {
-    throw IllegalStateException("this should never appear!")
-}
-
 fun <T> List<T>.containsUniqueItemsOnly(): Boolean {
     return this.toSet().size == this.size
 }
