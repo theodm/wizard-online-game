@@ -1,5 +1,3 @@
-import de.theodm.tinywebapigen.generator.dsl.*
-import de.theodm.tinywebapigen.generator.dsl.AuthConfig.SessionKeyAuth
 import java.nio.file.Paths
 
 plugins {
@@ -12,12 +10,8 @@ plugins {
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
     }
 
-    dependencies {
-        classpath("de.theodm:tiny-webapi-gen-generator:0.0.7-SNAPSHOT")
-    }
 }
 
 repositories {
