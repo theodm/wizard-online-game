@@ -1,0 +1,12 @@
+[Unit]
+Description=Wizard Game Server
+After=network.target
+
+[Service]
+Type=simple
+User=wizard
+WorkingDirectory=/home/apps/wizard
+ExecStart=/usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /home/apps/wizard/wizard-server.jar
+
+[Install]
+WantedBy=multi-user.target

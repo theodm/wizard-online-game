@@ -288,3 +288,4 @@ public
 /tdm-lobby-service/out/production/classes/META-INF/tdm-lobby-service.kotlin_module
 /tdm-lobby-service/out/production/resources/shiro.ini
 /tdm-lobby-service/out/test/resources/logback-test.xml
+keys.properties
